@@ -10,7 +10,6 @@
 		F212A30C1CC019FD001C740A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F212A30B1CC019FD001C740A /* AppDelegate.swift */; };
 		F212A30E1CC019FD001C740A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F212A30D1CC019FD001C740A /* ViewController.swift */; };
 		F212A3111CC019FD001C740A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F212A30F1CC019FD001C740A /* Main.storyboard */; };
-		F212A3141CC019FD001C740A /* LoggingSample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F212A3121CC019FD001C740A /* LoggingSample.xcdatamodeld */; };
 		F212A3161CC019FD001C740A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F212A3151CC019FD001C740A /* Assets.xcassets */; };
 		F212A3191CC019FD001C740A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F212A3171CC019FD001C740A /* LaunchScreen.storyboard */; };
 		F212A3271CC01A6B001C740A /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = F212A3211CC01A6B001C740A /* Log.swift */; };
@@ -25,7 +24,6 @@
 		F212A30B1CC019FD001C740A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F212A30D1CC019FD001C740A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		F212A3101CC019FD001C740A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		F212A3131CC019FD001C740A /* LoggingSample.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LoggingSample.xcdatamodel; sourceTree = "<group>"; };
 		F212A3151CC019FD001C740A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F212A3181CC019FD001C740A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F212A31A1CC019FD001C740A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -76,7 +74,6 @@
 				F212A3151CC019FD001C740A /* Assets.xcassets */,
 				F212A3171CC019FD001C740A /* LaunchScreen.storyboard */,
 				F212A31A1CC019FD001C740A /* Info.plist */,
-				F212A3121CC019FD001C740A /* LoggingSample.xcdatamodeld */,
 			);
 			path = LoggingSample;
 			sourceTree = "<group>";
@@ -161,7 +158,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F212A3141CC019FD001C740A /* LoggingSample.xcdatamodeld in Sources */,
 				F212A3281CC01A6B001C740A /* LoggingSample.xcdatamodeld in Sources */,
 				F212A30E1CC019FD001C740A /* ViewController.swift in Sources */,
 				F212A3271CC01A6B001C740A /* Log.swift in Sources */,
@@ -320,20 +316,11 @@
 				F212A31F1CC019FD001C740A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		F212A3121CC019FD001C740A /* LoggingSample.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				F212A3131CC019FD001C740A /* LoggingSample.xcdatamodel */,
-			);
-			currentVersion = F212A3131CC019FD001C740A /* LoggingSample.xcdatamodel */;
-			path = LoggingSample.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
 		F212A3221CC01A6B001C740A /* LoggingSample.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
