@@ -17,6 +17,8 @@
 		F212A3291CC01A6B001C740A /* LogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F212A3241CC01A6B001C740A /* LogService.swift */; };
 		F212A32A1CC01A6B001C740A /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F212A3251CC01A6B001C740A /* MainTableViewController.swift */; };
 		F212A32B1CC01A6B001C740A /* SecondTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F212A3261CC01A6B001C740A /* SecondTableViewController.swift */; };
+		F2C472031CC17D9B00AA8D8B /* LogMO.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C472021CC17D9B00AA8D8B /* LogMO.swift */; };
+		F2C472051CC17E5400AA8D8B /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C472041CC17E5400AA8D8B /* DataController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 		F212A3241CC01A6B001C740A /* LogService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
 		F212A3251CC01A6B001C740A /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 		F212A3261CC01A6B001C740A /* SecondTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondTableViewController.swift; sourceTree = "<group>"; };
+		F2C472021CC17D9B00AA8D8B /* LogMO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogMO.swift; sourceTree = "<group>"; };
+		F2C472041CC17E5400AA8D8B /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +78,7 @@
 				F212A3151CC019FD001C740A /* Assets.xcassets */,
 				F212A3171CC019FD001C740A /* LaunchScreen.storyboard */,
 				F212A31A1CC019FD001C740A /* Info.plist */,
+				F2C472041CC17E5400AA8D8B /* DataController.swift */,
 			);
 			path = LoggingSample;
 			sourceTree = "<group>";
@@ -83,6 +88,7 @@
 			children = (
 				F212A3211CC01A6B001C740A /* Log.swift */,
 				F212A3241CC01A6B001C740A /* LogService.swift */,
+				F2C472021CC17D9B00AA8D8B /* LogMO.swift */,
 			);
 			name = Logging;
 			sourceTree = "<group>";
@@ -162,6 +168,8 @@
 				F212A30E1CC019FD001C740A /* ViewController.swift in Sources */,
 				F212A3271CC01A6B001C740A /* Log.swift in Sources */,
 				F212A3291CC01A6B001C740A /* LogService.swift in Sources */,
+				F2C472051CC17E5400AA8D8B /* DataController.swift in Sources */,
+				F2C472031CC17D9B00AA8D8B /* LogMO.swift in Sources */,
 				F212A32B1CC01A6B001C740A /* SecondTableViewController.swift in Sources */,
 				F212A30C1CC019FD001C740A /* AppDelegate.swift in Sources */,
 				F212A32A1CC01A6B001C740A /* MainTableViewController.swift in Sources */,

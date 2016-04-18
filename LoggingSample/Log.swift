@@ -39,6 +39,16 @@ class Log: NSObject, NSCoding {
         
     }
     
+    init(logMO: LogMO) {
+        self.logType = LogType.init(rawValue: logMO.logType)!
+        self.message = logMO.message!
+        self.date = logMO.date!
+        self.appendDate = logMO.appendDate
+        self.showLogLevel = logMO.showLogLevel
+        
+        super.init()
+    }
+    
     func printLog() -> String {
         var returnString = message
         if appendDate {

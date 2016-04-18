@@ -6,7 +6,8 @@
 //  Copyright © 2016 Rakibul Islam. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import CoreData
 
 enum LogServiceEndpoints {
     case CONSOLE, FILE, WEB, COREDATA
@@ -16,12 +17,16 @@ class LogService: NSObject {
     
     var logs = [Log]()
     var endpoint: LogServiceEndpoints
+    var dataController: DataController!
     
     init(endpoint: LogServiceEndpoints) {
         self.endpoint = endpoint
         super.init()
         if endpoint == .FILE {
             openFile()
+        }
+        else if endpoint == .COREDATA {
+            getFromCoreData()
         }
     }
     
@@ -56,6 +61,7 @@ class LogService: NSObject {
     
     func sendToCoreData(log: Log) {
         print("save in CoreData")
+        dataController.addLog(log)
     }
     
     func printAllLogs() {
@@ -77,11 +83,24 @@ class LogService: NSObject {
         if endpoint == .FILE {
             NSKeyedArchiver.archiveRootObject(logs, toFile: Log.FileUrl.path!)
         }
+        else if endpoint == .COREDATA {
+            dataController.clearAllLogs()
+        }
     }
     
     func openFile() {
         if let logArray = NSKeyedUnarchiver.unarchiveObjectWithFile(Log.FileUrl.path!) as? [Log] {
             logs.appendContentsOf(logArray)
+        }
+    }
+    
+    func getFromCoreData() {
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        dataController = appDelegate.dataController
+        let logArray = dataController.getLogs()
+        for logMO in logArray {
+            let log = Log(logMO: logMO)
+            logs.append(log)
         }
     }
 }
