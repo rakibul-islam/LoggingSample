@@ -34,13 +34,13 @@ class LogService: NSObject {
         logs.append(log)
         switch endpoint {
         case .CONSOLE:
-            sendToConsole(log)
+            sendToConsole(log: log)
         case .FILE:
-            sendToFile(log)
+            sendToFile(log: log)
         case .WEB:
-            sendToWeb(log)
+            sendToWeb(log: log)
         case .COREDATA:
-            sendToCoreData(log)
+            sendToCoreData(log: log)
         }
     }
     
@@ -49,7 +49,7 @@ class LogService: NSObject {
     }
     
     func sendToFile(log: Log) {
-        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(logs, toFile: Log.FileUrl.path!)
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(logs, toFile: Log.FileUrl.path)
         if !isSuccessfulSave {
             print("Failed to save logs...")
         }
@@ -61,7 +61,7 @@ class LogService: NSObject {
     
     func sendToCoreData(log: Log) {
         print("save in CoreData")
-        dataController.addLog(log)
+        dataController.addLog(log: log)
     }
     
     func printAllLogs() {
@@ -81,7 +81,7 @@ class LogService: NSObject {
     func clearAllLogs() {
         logs.removeAll()
         if endpoint == .FILE {
-            NSKeyedArchiver.archiveRootObject(logs, toFile: Log.FileUrl.path!)
+            NSKeyedArchiver.archiveRootObject(logs, toFile: Log.FileUrl.path)
         }
         else if endpoint == .COREDATA {
             dataController.clearAllLogs()
@@ -89,13 +89,13 @@ class LogService: NSObject {
     }
     
     func openFile() {
-        if let logArray = NSKeyedUnarchiver.unarchiveObjectWithFile(Log.FileUrl.path!) as? [Log] {
-            logs.appendContentsOf(logArray)
+        if let logArray = NSKeyedUnarchiver.unarchiveObject(withFile: Log.FileUrl.path) as? [Log] {
+            logs.append(contentsOf: logArray)
         }
     }
     
     func getFromCoreData() {
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         dataController = appDelegate.dataController
         let logArray = dataController.getLogs()
         for logMO in logArray {

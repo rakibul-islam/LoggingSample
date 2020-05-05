@@ -13,21 +13,21 @@ class DataController: NSObject {
     
     var managedObjectContext: NSManagedObjectContext
     override init() {
-        guard let modelURL = NSBundle.mainBundle().URLForResource("LoggingSample", withExtension: "momd") else {
+        guard let modelURL = Bundle.main.url(forResource: "LoggingSample", withExtension: "momd") else {
             fatalError("Error loading model from bundle")
         }
-        guard let mom = NSManagedObjectModel(contentsOfURL: modelURL) else {
+        guard let mom = NSManagedObjectModel(contentsOf: modelURL) else {
             fatalError("Error initializing mom from: \(modelURL)")
         }
         let psc = NSPersistentStoreCoordinator(managedObjectModel: mom)
-        managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+        managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = psc
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) { 
-            let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+        DispatchQueue.global(qos: .background).async() {
+            let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
             let docUrl = urls[urls.endIndex - 1]
-            let storeURL = docUrl.URLByAppendingPathComponent("LoggingSample.sqlite")
+            let storeURL = docUrl.appendingPathComponent("LoggingSample.sqlite")
             do {
-                try psc.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: nil)
+                try psc.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL, options: nil)
             }
             catch {
                 fatalError("Error migrating store: \(error)")
@@ -36,7 +36,7 @@ class DataController: NSObject {
     }
     
     func addLog(log: Log) {
-        let logMO = NSEntityDescription.insertNewObjectForEntityForName("Log", inManagedObjectContext: self.managedObjectContext) as! LogMO
+        let logMO = NSEntityDescription.insertNewObject(forEntityName: "Log", into: self.managedObjectContext) as! LogMO
         logMO.logType = log.logType.rawValue
         logMO.message = log.message
         logMO.date = log.date
@@ -51,10 +51,10 @@ class DataController: NSObject {
     }
     
     func getLogs() -> [LogMO] {
-        let logFetch = NSFetchRequest(entityName: "Log")
+        let logFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Log")
         var returnLogs = [LogMO]()
         do {
-            let fetchedLogs = try managedObjectContext.executeFetchRequest(logFetch) as! [LogMO]
+            let fetchedLogs = try managedObjectContext.fetch(logFetch) as! [LogMO]
             returnLogs += fetchedLogs
         }
         catch {
@@ -66,7 +66,7 @@ class DataController: NSObject {
     func clearAllLogs() {
         let logs = getLogs()
         for logMO in logs {
-            managedObjectContext.deleteObject(logMO)
+            managedObjectContext.delete(logMO)
         }
         do {
             try managedObjectContext.save()

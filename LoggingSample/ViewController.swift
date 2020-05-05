@@ -29,11 +29,11 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if addButton === sender {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if addButton.isEqual(sender) {
             let message = messageTextField.text ?? "No message"
             let selectedValue = typeSegmentedControl.selectedSegmentIndex
-            log = Log(logType: LogType(rawValue: selectedValue)!, message: message, appendDate: appendDateSwitch.on, showLogLevel: showLevelSwitch.on)
+            log = Log(logType: LogType(rawValue: selectedValue)!, message: message, appendDate: appendDateSwitch.isOn, showLogLevel: showLevelSwitch.isOn)
         }
     }
 
