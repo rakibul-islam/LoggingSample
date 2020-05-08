@@ -9,10 +9,10 @@
 import UIKit
 
 class MainTableViewController: UITableViewController {
-    var consoleLog : LogService!
-    var fileLog : LogService!
-    var webLog : LogService!
-    var dataLog : LogService!
+    lazy var consoleLog = LogService(endpoint: .console)
+    lazy var fileLog = LogService(endpoint: .file)
+    lazy var webLog = LogService(endpoint: .web)
+    lazy var dataLog = LogService(endpoint: .coreData)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,25 +108,12 @@ class MainTableViewController: UITableViewController {
             let selectedIndex = tableView.indexPathForSelectedRow?.row {
             switch selectedIndex {
             case 1:
-                if fileLog == nil {
-                    fileLog = LogService.init(endpoint: LogServiceEndpoints.FILE)
-                }
                 secondTableVC.logService = fileLog
             case 2:
-                if webLog == nil {
-                    webLog = LogService.init(endpoint: LogServiceEndpoints.WEB)
-                }
                 secondTableVC.logService = webLog
-                
             case 3:
-                if dataLog == nil {
-                    dataLog = LogService.init(endpoint: LogServiceEndpoints.COREDATA)
-                }
                 secondTableVC.logService = dataLog
             default:
-                if consoleLog == nil {
-                    consoleLog = LogService.init(endpoint: LogServiceEndpoints.CONSOLE)
-                }
                 secondTableVC.logService = consoleLog
             }
         }

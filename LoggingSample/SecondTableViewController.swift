@@ -24,13 +24,13 @@ class SecondTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         switch logService.endpoint {
-            case .CONSOLE:
+            case .console:
                 navigationItem.title = "Console Log"
-            case .COREDATA:
+            case .coreData:
                 navigationItem.title = "Core Data Log"
-            case .FILE:
+            case .file:
                 navigationItem.title = "File Log"
-            case .WEB:
+            case .web:
                 navigationItem.title = "Web Log"
         }
     }
@@ -56,8 +56,7 @@ class SecondTableViewController: UITableViewController {
         // Configure the cell...
         if indexPath.row == logService.logs.count {
             cell.textLabel?.text = "Clear Logs"
-        }
-        else {
+        } else {
             let log = logService.logs[indexPath.row]
             cell.textLabel?.text = log.printLog()
         }

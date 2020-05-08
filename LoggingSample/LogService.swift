@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 enum LogServiceEndpoints {
-    case CONSOLE, FILE, WEB, COREDATA
+    case console, file, web, coreData
 }
 
 class LogService: NSObject {
@@ -18,14 +18,20 @@ class LogService: NSObject {
     var logs = [Log]()
     var endpoint: LogServiceEndpoints
     var dataController: DataController!
+    lazy var fileUrl: URL = {
+        guard let delegate = UIApplication.shared.delegate as? AppDelegate, let url = delegate.applicationDocumentsDirectory.appendingPathComponent("logs") else {
+            fatalError("something seriously wrong here")
+        }
+        return url
+    }()
     
     init(endpoint: LogServiceEndpoints) {
         self.endpoint = endpoint
         super.init()
-        if endpoint == .FILE {
+        if endpoint == .file {
             openFile()
         }
-        else if endpoint == .COREDATA {
+        else if endpoint == .coreData {
             getFromCoreData()
         }
     }
@@ -33,13 +39,13 @@ class LogService: NSObject {
     func addLog(log: Log) {
         logs.append(log)
         switch endpoint {
-        case .CONSOLE:
+        case .console:
             sendToConsole(log: log)
-        case .FILE:
+        case .file:
             sendToFile(log: log)
-        case .WEB:
+        case .web:
             sendToWeb(log: log)
-        case .COREDATA:
+        case .coreData:
             sendToCoreData(log: log)
         }
     }
@@ -49,9 +55,12 @@ class LogService: NSObject {
     }
     
     func sendToFile(log: Log) {
-        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(logs, toFile: Log.FileUrl.path)
-        if !isSuccessfulSave {
-            print("Failed to save logs...")
+        do {
+            let data = try NSKeyedArchiver.archivedData(withRootObject: logs, requiringSecureCoding: true)
+            try data.write(to: fileUrl)
+            print(data)
+        } catch {
+            print("Failed to save logs...\(error)")
         }
     }
     
@@ -80,17 +89,32 @@ class LogService: NSObject {
     
     func clearAllLogs() {
         logs.removeAll()
-        if endpoint == .FILE {
-            NSKeyedArchiver.archiveRootObject(logs, toFile: Log.FileUrl.path)
+        if endpoint == .file {
+            do {
+                let data = try NSKeyedArchiver.archivedData(withRootObject: logs, requiringSecureCoding: true)
+                try data.write(to: fileUrl)
+                print(data)
+            } catch {
+                print("Failed to save logs...\(error)")
+            }
         }
-        else if endpoint == .COREDATA {
+        else if endpoint == .coreData {
             dataController.clearAllLogs()
         }
     }
     
     func openFile() {
-        if let logArray = NSKeyedUnarchiver.unarchiveObject(withFile: Log.FileUrl.path) as? [Log] {
-            logs.append(contentsOf: logArray)
+        if FileManager.default.fileExists(atPath: fileUrl.path) {
+            do {
+                let data = try Data(contentsOf: fileUrl)
+                if let logArray = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [Log] {
+                    logs.append(contentsOf: logArray)
+                }
+            } catch {
+                print("Failed to load logs...\(error)")
+            }
+        } else {
+            FileManager.default.createFile(atPath: fileUrl.path, contents: nil, attributes: nil)
         }
     }
     

@@ -33,7 +33,7 @@ class ViewController: UIViewController {
         if addButton.isEqual(sender) {
             let message = messageTextField.text ?? "No message"
             let selectedValue = typeSegmentedControl.selectedSegmentIndex
-            log = Log(logType: LogType(rawValue: selectedValue)!, message: message, appendDate: appendDateSwitch.isOn, showLogLevel: showLevelSwitch.isOn)
+            log = Log(logType: LogType(rawValue: selectedValue) ?? .debug, message: message, appendDate: appendDateSwitch.isOn, showLogLevel: showLevelSwitch.isOn)
         }
     }
 

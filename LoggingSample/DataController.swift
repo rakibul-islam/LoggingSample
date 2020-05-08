@@ -58,7 +58,7 @@ class DataController: NSObject {
             returnLogs += fetchedLogs
         }
         catch {
-            fatalError("Failed to fetch employees: \(error)")
+            debugPrint("Failed to fetch logs: \(error)")
         }
         return returnLogs
     }
