@@ -1,6 +1,6 @@
 //
-//  ViewController.swift
-//  JetLog
+//  AddLogViewController.swift
+//  LoggingSample
 //
 //  Created by Rakibul Islam on 4/7/16.
 //  Copyright © 2016 Rakibul Islam. All rights reserved.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class AddLogViewController: UIViewController {
     
     @IBOutlet weak var messageTextField: UITextField!
     @IBOutlet weak var appendDateSwitch: UISwitch!
@@ -29,11 +29,11 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if addButton === sender {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if addButton.isEqual(sender) {
             let message = messageTextField.text ?? "No message"
             let selectedValue = typeSegmentedControl.selectedSegmentIndex
-            log = Log(logType: LogType(rawValue: selectedValue)!, message: message, appendDate: appendDateSwitch.on, showLogLevel: showLevelSwitch.on)
+            log = Log(logType: LogType(rawValue: selectedValue) ?? .debug, message: message, appendDate: appendDateSwitch.isOn, showLogLevel: showLevelSwitch.isOn)
         }
     }
 

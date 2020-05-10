@@ -1,6 +1,6 @@
 //
 //  LogService.swift
-//  JetLog
+//  LoggingSample
 //
 //  Created by Rakibul Islam on 4/7/16.
 //  Copyright © 2016 Rakibul Islam. All rights reserved.
@@ -10,7 +10,20 @@ import UIKit
 import CoreData
 
 enum LogServiceEndpoints {
-    case CONSOLE, FILE, WEB, COREDATA
+    case console, file, web, coreData
+    
+    var name: String {
+        switch self {
+        case .console:
+            return "Console"
+        case .file:
+            return "File"
+        case .web:
+            return "Web"
+        case .coreData:
+            return "CoreData"
+        }
+    }
 }
 
 class LogService: NSObject {
@@ -18,14 +31,20 @@ class LogService: NSObject {
     var logs = [Log]()
     var endpoint: LogServiceEndpoints
     var dataController: DataController!
+    lazy var fileUrl: URL = {
+        guard let delegate = UIApplication.shared.delegate as? AppDelegate, let url = delegate.applicationDocumentsDirectory.appendingPathComponent("logs") else {
+            fatalError("something seriously wrong here")
+        }
+        return url
+    }()
     
     init(endpoint: LogServiceEndpoints) {
         self.endpoint = endpoint
         super.init()
-        if endpoint == .FILE {
+        if endpoint == .file {
             openFile()
         }
-        else if endpoint == .COREDATA {
+        else if endpoint == .coreData {
             getFromCoreData()
         }
     }
@@ -33,14 +52,14 @@ class LogService: NSObject {
     func addLog(log: Log) {
         logs.append(log)
         switch endpoint {
-        case .CONSOLE:
-            sendToConsole(log)
-        case .FILE:
-            sendToFile(log)
-        case .WEB:
-            sendToWeb(log)
-        case .COREDATA:
-            sendToCoreData(log)
+        case .console:
+            sendToConsole(log: log)
+        case .file:
+            sendToFile(log: log)
+        case .web:
+            sendToWeb(log: log)
+        case .coreData:
+            sendToCoreData(log: log)
         }
     }
     
@@ -49,9 +68,12 @@ class LogService: NSObject {
     }
     
     func sendToFile(log: Log) {
-        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(logs, toFile: Log.FileUrl.path!)
-        if !isSuccessfulSave {
-            print("Failed to save logs...")
+        do {
+            let data = try NSKeyedArchiver.archivedData(withRootObject: logs, requiringSecureCoding: true)
+            try data.write(to: fileUrl)
+            print(data)
+        } catch {
+            print("Failed to save logs...\(error)")
         }
     }
     
@@ -61,7 +83,7 @@ class LogService: NSObject {
     
     func sendToCoreData(log: Log) {
         print("save in CoreData")
-        dataController.addLog(log)
+        dataController.addLog(log: log)
     }
     
     func printAllLogs() {
@@ -71,31 +93,43 @@ class LogService: NSObject {
     }
     
     func printLogsOfType(logType: LogType) {
-        for log in logs {
-            if log.logType == logType {
-                print(log.printLog())
-            }
+        for log in logs where log.logType == logType {
+            print(log.printLog())
         }
     }
     
     func clearAllLogs() {
         logs.removeAll()
-        if endpoint == .FILE {
-            NSKeyedArchiver.archiveRootObject(logs, toFile: Log.FileUrl.path!)
+        if endpoint == .file {
+            do {
+                let data = try NSKeyedArchiver.archivedData(withRootObject: logs, requiringSecureCoding: true)
+                try data.write(to: fileUrl)
+            } catch {
+                print("Failed to save logs...\(error)")
+            }
         }
-        else if endpoint == .COREDATA {
+        else if endpoint == .coreData {
             dataController.clearAllLogs()
         }
     }
     
     func openFile() {
-        if let logArray = NSKeyedUnarchiver.unarchiveObjectWithFile(Log.FileUrl.path!) as? [Log] {
-            logs.appendContentsOf(logArray)
+        if FileManager.default.fileExists(atPath: fileUrl.path) {
+            do {
+                let data = try Data(contentsOf: fileUrl)
+                if let logArray = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [Log] {
+                    logs.append(contentsOf: logArray)
+                }
+            } catch {
+                print("Failed to load logs...\(error)")
+            }
+        } else {
+            FileManager.default.createFile(atPath: fileUrl.path, contents: nil, attributes: nil)
         }
     }
     
     func getFromCoreData() {
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         dataController = appDelegate.dataController
         let logArray = dataController.getLogs()
         for logMO in logArray {

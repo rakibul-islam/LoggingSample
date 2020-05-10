@@ -1,6 +1,6 @@
 //
 //  Log.swift
-//  JetLog
+//  LoggingSample
 //
 //  Created by Rakibul Islam on 4/7/16.
 //  Copyright © 2016 Rakibul Islam. All rights reserved.
@@ -9,10 +9,11 @@
 import Foundation
 
 enum LogType: Int {
-    case DEBUG = 0, INFO, WARNING, ERROR
+    case debug = 0, info, warning, error
 }
 
-class Log: NSObject, NSCoding {
+class Log: NSObject, NSSecureCoding {
+    static var supportsSecureCoding: Bool = true
    
     var logType: LogType
     var message: String
@@ -20,14 +21,13 @@ class Log: NSObject, NSCoding {
     var appendDate: Bool
     var showLogLevel: Bool
     
-    static let DocumentsDirectory = NSFileManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
-    static let FileUrl = DocumentsDirectory.URLByAppendingPathComponent("logs")
-    
     init(logType: LogType, message: String, appendDate: Bool, showLogLevel: Bool) {
         self.logType = logType
         self.message = message
-        let currentDate = NSDate.init()
-        self.date = currentDate.description
+        let currentDate = Date()
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        self.date = formatter.string(from: currentDate)
         self.appendDate = appendDate
         self.showLogLevel = showLogLevel
         
@@ -40,9 +40,9 @@ class Log: NSObject, NSCoding {
     }
     
     init(logMO: LogMO) {
-        self.logType = LogType.init(rawValue: logMO.logType)!
-        self.message = logMO.message!
-        self.date = logMO.date!
+        self.logType = LogType(rawValue: logMO.logType) ?? .debug
+        self.message = logMO.message ?? ""
+        self.date = logMO.date ?? ""
         self.appendDate = logMO.appendDate
         self.showLogLevel = logMO.showLogLevel
         
@@ -56,31 +56,31 @@ class Log: NSObject, NSCoding {
         }
         if showLogLevel {
             switch logType {
-            case .DEBUG:
+            case .debug:
                 returnString = "DEBUG : " + returnString
-            case .INFO:
+            case .info:
                 returnString = "INFO : " + returnString
-            case .WARNING:
+            case .warning:
                 returnString = "WARNING : " + returnString
-            case .ERROR:
+            case .error:
                 returnString = "ERROR : " + returnString
             }
         }
         return returnString
     }
     
-    func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(message, forKey: "message")
-        aCoder.encodeInteger(logType.rawValue, forKey: "LogType")
-        aCoder.encodeBool(appendDate, forKey: "appendDate")
-        aCoder.encodeBool(showLogLevel, forKey: "showLogLevel")
+    func encode(with coder: NSCoder) {
+        coder.encode(message, forKey: "message")
+        coder.encode(logType.rawValue, forKey: "LogType")
+        coder.encode(appendDate, forKey: "appendDate")
+        coder.encode(showLogLevel, forKey: "showLogLevel")
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let message = aDecoder.decodeObjectForKey("message") as! String
-        let logType = aDecoder.decodeIntegerForKey("LogType")
-        let appendDate = aDecoder.decodeBoolForKey("appendDate")
-        let showLogLevel = aDecoder.decodeBoolForKey("showLogLevel")
+        let message = aDecoder.decodeObject(forKey: "message") as! String
+        let logType = aDecoder.decodeInteger(forKey: "LogType")
+        let appendDate = aDecoder.decodeBool(forKey: "appendDate")
+        let showLogLevel = aDecoder.decodeBool(forKey: "showLogLevel")
         self.init(logType: LogType.init(rawValue: logType)!, message: message, appendDate: appendDate, showLogLevel: showLogLevel)
         
     }

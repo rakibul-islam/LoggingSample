@@ -1,6 +1,6 @@
 //
 //  SecondTableViewController.swift
-//  JetLog
+//  LoggingSample
 //
 //  Created by Rakibul Islam on 4/8/16.
 //  Copyright © 2016 Rakibul Islam. All rights reserved.
@@ -21,16 +21,16 @@ class SecondTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         switch logService.endpoint {
-            case .CONSOLE:
+            case .console:
                 navigationItem.title = "Console Log"
-            case .COREDATA:
+            case .coreData:
                 navigationItem.title = "Core Data Log"
-            case .FILE:
+            case .file:
                 navigationItem.title = "File Log"
-            case .WEB:
+            case .web:
                 navigationItem.title = "Web Log"
         }
     }
@@ -41,45 +41,43 @@ class SecondTableViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
-
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return logService.logs.count + 1
     }
 
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("secondCellIdentifier", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "secondCellIdentifier", for: indexPath)
 
         // Configure the cell...
         if indexPath.row == logService.logs.count {
             cell.textLabel?.text = "Clear Logs"
-        }
-        else {
+        } else {
             let log = logService.logs[indexPath.row]
             cell.textLabel?.text = log.printLog()
         }
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == logService.logs.count {
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
             logService.clearAllLogs()
-            let alertController = UIAlertController(title: "Success", message: "All Logs Cleared!", preferredStyle: UIAlertControllerStyle.Alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (self) in
+            let alertController = UIAlertController(title: "Success", message: "All Logs Cleared!", preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (self) in
                 tableView.reloadData()
             }))
-            presentViewController(alertController, animated: true, completion: nil)
+            present(alertController, animated: true, completion: nil)
         }
     }
     
     @IBAction func unwindToList(sender: UIStoryboardSegue) {
-        if let sourceViewController = sender.sourceViewController as? ViewController, log = sourceViewController.log{
-            logService.addLog(log)
+        if let sourceViewController = sender.source as? AddLogViewController, let log = sourceViewController.log {
+            logService.addLog(log: log)
             tableView.reloadData()
         }
     }
