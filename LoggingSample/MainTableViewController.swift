@@ -1,6 +1,6 @@
 //
 //  MainTableViewController.swift
-//  JetLog
+//  LoggingSample
 //
 //  Created by Rakibul Islam on 4/8/16.
 //  Copyright © 2016 Rakibul Islam. All rights reserved.
@@ -9,19 +9,15 @@
 import UIKit
 
 class MainTableViewController: UITableViewController {
-    lazy var consoleLog = LogService(endpoint: .console)
-    lazy var fileLog = LogService(endpoint: .file)
-    lazy var webLog = LogService(endpoint: .web)
-    lazy var dataLog = LogService(endpoint: .coreData)
+    var services: [LogService] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        services = [.init(endpoint: .console),
+                    .init(endpoint: .file),
+                    .init(endpoint: .web),
+                    .init(endpoint: .coreData)]
     }
 
     override func didReceiveMemoryWarning() {
@@ -35,27 +31,15 @@ class MainTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return services.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier", for: indexPath)
 
         // Configure the cell...
-        switch indexPath.row {
-        case 1:
-            cell.textLabel?.text = "File"
-            break
-        case 2:
-            cell.textLabel?.text = "Web"
-            break
-        case 3:
-            cell.textLabel?.text = "CoreData"
-            break
-        default:
-            cell.textLabel?.text = "Console"
-            break;
-        }
+        let service = services[indexPath.row]
+        cell.textLabel?.text = service.endpoint.name
 
         return cell
     }
@@ -106,16 +90,7 @@ class MainTableViewController: UITableViewController {
         if segue.identifier == "goToConsole",
             let secondTableVC = segue.destination as? SecondTableViewController,
             let selectedIndex = tableView.indexPathForSelectedRow?.row {
-            switch selectedIndex {
-            case 1:
-                secondTableVC.logService = fileLog
-            case 2:
-                secondTableVC.logService = webLog
-            case 3:
-                secondTableVC.logService = dataLog
-            default:
-                secondTableVC.logService = consoleLog
-            }
+            secondTableVC.logService = services[selectedIndex]
         }
     }
     

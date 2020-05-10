@@ -10,29 +10,20 @@ import UIKit
 import CoreData
 
 class DataController: NSObject {
+    var persistentContainer: NSPersistentContainer
+    lazy var managedObjectContext: NSManagedObjectContext = {
+        return persistentContainer.viewContext
+    }()
     
-    var managedObjectContext: NSManagedObjectContext
-    override init() {
-        guard let modelURL = Bundle.main.url(forResource: "LoggingSample", withExtension: "momd") else {
-            fatalError("Error loading model from bundle")
+    init(container: NSPersistentContainer) {
+        persistentContainer = container
+    }
+    
+    override convenience init() {
+        guard let delegate = UIApplication.shared.delegate as? AppDelegate else {
+            fatalError("Something wrong here!")
         }
-        guard let mom = NSManagedObjectModel(contentsOf: modelURL) else {
-            fatalError("Error initializing mom from: \(modelURL)")
-        }
-        let psc = NSPersistentStoreCoordinator(managedObjectModel: mom)
-        managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        managedObjectContext.persistentStoreCoordinator = psc
-        DispatchQueue.global(qos: .background).async() {
-            let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-            let docUrl = urls[urls.endIndex - 1]
-            let storeURL = docUrl.appendingPathComponent("LoggingSample.sqlite")
-            do {
-                try psc.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL, options: nil)
-            }
-            catch {
-                fatalError("Error migrating store: \(error)")
-            }
-        }
+        self.init(container: delegate.persistentContainer)
     }
     
     func addLog(log: Log) {
@@ -54,8 +45,9 @@ class DataController: NSObject {
         let logFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Log")
         var returnLogs = [LogMO]()
         do {
-            let fetchedLogs = try managedObjectContext.fetch(logFetch) as! [LogMO]
-            returnLogs += fetchedLogs
+            if let fetchedLogs = try managedObjectContext.fetch(logFetch) as? [LogMO] {
+                returnLogs += fetchedLogs
+            }
         }
         catch {
             debugPrint("Failed to fetch logs: \(error)")

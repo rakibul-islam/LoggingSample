@@ -1,6 +1,6 @@
 //
 //  Log.swift
-//  JetLog
+//  LoggingSample
 //
 //  Created by Rakibul Islam on 4/7/16.
 //  Copyright © 2016 Rakibul Islam. All rights reserved.

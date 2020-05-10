@@ -1,6 +1,6 @@
 //
 //  SecondTableViewController.swift
-//  JetLog
+//  LoggingSample
 //
 //  Created by Rakibul Islam on 4/8/16.
 //  Copyright © 2016 Rakibul Islam. All rights reserved.
@@ -76,7 +76,7 @@ class SecondTableViewController: UITableViewController {
     }
     
     @IBAction func unwindToList(sender: UIStoryboardSegue) {
-        if let sourceViewController = sender.source as? ViewController, let log = sourceViewController.log {
+        if let sourceViewController = sender.source as? AddLogViewController, let log = sourceViewController.log {
             logService.addLog(log: log)
             tableView.reloadData()
         }

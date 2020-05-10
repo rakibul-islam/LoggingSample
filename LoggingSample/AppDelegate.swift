@@ -45,6 +45,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     // MARK: - Core Data stack
+    
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "LoggingSample")
+        container.loadPersistentStores { (_, error) in
+            if let error = error {
+                debugPrint(error.localizedDescription)
+                fatalError("Unable to load persistent stores: \(error)")
+            }
+        }
+        return container
+    }()
 
     lazy var applicationDocumentsDirectory: NSURL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "com.rakibulislam.LoggingSample" in the application's documents Application Support directory.

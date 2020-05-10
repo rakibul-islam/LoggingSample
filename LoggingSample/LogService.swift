@@ -1,6 +1,6 @@
 //
 //  LogService.swift
-//  JetLog
+//  LoggingSample
 //
 //  Created by Rakibul Islam on 4/7/16.
 //  Copyright © 2016 Rakibul Islam. All rights reserved.
@@ -11,6 +11,19 @@ import CoreData
 
 enum LogServiceEndpoints {
     case console, file, web, coreData
+    
+    var name: String {
+        switch self {
+        case .console:
+            return "Console"
+        case .file:
+            return "File"
+        case .web:
+            return "Web"
+        case .coreData:
+            return "CoreData"
+        }
+    }
 }
 
 class LogService: NSObject {
@@ -80,10 +93,8 @@ class LogService: NSObject {
     }
     
     func printLogsOfType(logType: LogType) {
-        for log in logs {
-            if log.logType == logType {
-                print(log.printLog())
-            }
+        for log in logs where log.logType == logType {
+            print(log.printLog())
         }
     }
     
@@ -93,7 +104,6 @@ class LogService: NSObject {
             do {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: logs, requiringSecureCoding: true)
                 try data.write(to: fileUrl)
-                print(data)
             } catch {
                 print("Failed to save logs...\(error)")
             }
@@ -119,7 +129,7 @@ class LogService: NSObject {
     }
     
     func getFromCoreData() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         dataController = appDelegate.dataController
         let logArray = dataController.getLogs()
         for logMO in logArray {

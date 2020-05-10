@@ -1,6 +1,6 @@
 //
-//  ViewController.swift
-//  JetLog
+//  AddLogViewController.swift
+//  LoggingSample
 //
 //  Created by Rakibul Islam on 4/7/16.
 //  Copyright © 2016 Rakibul Islam. All rights reserved.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class AddLogViewController: UIViewController {
     
     @IBOutlet weak var messageTextField: UITextField!
     @IBOutlet weak var appendDateSwitch: UISwitch!
