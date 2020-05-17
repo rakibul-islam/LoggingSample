@@ -28,9 +28,9 @@ enum LogServiceEndpoints {
 
 class LogService: NSObject {
     
-    var logs = [Log]()
+    var logs: [Log] = []
     var endpoint: LogServiceEndpoints
-    var dataController: DataController!
+    lazy var dataController = DataController()
     lazy var fileUrl: URL = {
         guard let delegate = UIApplication.shared.delegate as? AppDelegate, let url = delegate.applicationDocumentsDirectory.appendingPathComponent("logs") else {
             fatalError("something seriously wrong here")
@@ -44,22 +44,43 @@ class LogService: NSObject {
         if endpoint == .file {
             openFile()
         }
-        else if endpoint == .coreData {
-            getFromCoreData()
-        }
     }
     
     func addLog(log: Log) {
+        if endpoint == .coreData {
+            sendToCoreData(log: log)
+            return
+        }
         logs.append(log)
         switch endpoint {
         case .console:
             sendToConsole(log: log)
         case .file:
-            sendToFile(log: log)
+            sendToFile()
         case .web:
             sendToWeb(log: log)
-        case .coreData:
-            sendToCoreData(log: log)
+        default:
+            break
+        }
+    }
+    
+    func deleteLog(log: Any?) {
+        if let logMO = log as? LogMO {
+            dataController.deleteLog(log: logMO)
+        } else if let log = log as? Log {
+            deleteLog(log: log)
+        }
+    }
+    
+    private func deleteLog(log: Log) {
+        if let index = logs.firstIndex(of: log) {
+            logs.remove(at: index)
+            switch endpoint {
+            case .file:
+                sendToFile()
+            default:
+                break
+            }
         }
     }
     
@@ -67,7 +88,7 @@ class LogService: NSObject {
         print(log.printLog())
     }
     
-    func sendToFile(log: Log) {
+    func sendToFile() {
         do {
             let data = try NSKeyedArchiver.archivedData(withRootObject: logs, requiringSecureCoding: true)
             try data.write(to: fileUrl)
@@ -125,16 +146,6 @@ class LogService: NSObject {
             }
         } else {
             FileManager.default.createFile(atPath: fileUrl.path, contents: nil, attributes: nil)
-        }
-    }
-    
-    func getFromCoreData() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        dataController = appDelegate.dataController
-        let logArray = dataController.getLogs()
-        for logMO in logArray {
-            let log = Log(logMO: logMO)
-            logs.append(log)
         }
     }
 }

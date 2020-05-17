@@ -36,7 +36,5 @@ class AddLogViewController: UIViewController {
             log = Log(logType: LogType(rawValue: selectedValue) ?? .debug, message: message, appendDate: appendDateSwitch.isOn, showLogLevel: showLevelSwitch.isOn)
         }
     }
-
-
 }
 

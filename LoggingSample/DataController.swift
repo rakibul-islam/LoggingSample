@@ -27,8 +27,8 @@ class DataController: NSObject {
     }
     
     func addLog(log: Log) {
-        let logMO = NSEntityDescription.insertNewObject(forEntityName: "Log", into: self.managedObjectContext) as! LogMO
-        logMO.logType = log.logType.rawValue
+        let logMO = NSEntityDescription.insertNewObject(forEntityName: "Log", into: managedObjectContext) as! LogMO
+        logMO.logType = Int64(log.logType.rawValue)
         logMO.message = log.message
         logMO.date = log.date
         logMO.appendDate = log.appendDate
@@ -37,22 +37,34 @@ class DataController: NSObject {
             try managedObjectContext.save()
         }
         catch {
-            fatalError("Failure to save context: \(error)")
+            debugPrint("Failure to save context: \(error)")
         }
     }
     
     func getLogs() -> [LogMO] {
-        let logFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Log")
+        let logFetch = NSFetchRequest<LogMO>(entityName: "Log")
         var returnLogs = [LogMO]()
         do {
-            if let fetchedLogs = try managedObjectContext.fetch(logFetch) as? [LogMO] {
-                returnLogs += fetchedLogs
-            }
+            let fetchedLogs = try managedObjectContext.fetch(logFetch)
+            returnLogs += fetchedLogs
         }
         catch {
             debugPrint("Failed to fetch logs: \(error)")
         }
         return returnLogs
+    }
+    
+    func deleteLog(log: LogMO) {
+        guard let date = log.date as NSDate? else { return }
+        let logFetch = NSFetchRequest<LogMO>(entityName: "Log")
+        logFetch.predicate = NSPredicate(format: "date == %@", date)
+        do {
+            let fetchedLogs = try managedObjectContext.fetch(logFetch)
+            fetchedLogs.forEach({ managedObjectContext.delete($0) })
+            try managedObjectContext.save()
+        } catch {
+            debugPrint("Failed to delete logs: \(error)")
+        }
     }
     
     func clearAllLogs() {
@@ -64,7 +76,7 @@ class DataController: NSObject {
             try managedObjectContext.save()
         }
         catch {
-            fatalError("Failure to save context: \(error)")
+            debugPrint("Failure to save context: \(error)")
         }
     }
     
