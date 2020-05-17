@@ -32,7 +32,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="Ca8-by-XfP" kind="show" identifier="goToConsole" id="94L-43-LjT"/>
+                                    <segue destination="dp3-6Y-khG" kind="show" identifier="goToConsole" id="rTo-j3-HYM"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -47,49 +47,58 @@
             </objects>
             <point key="canvasLocation" x="633" y="-321"/>
         </scene>
-        <!--Title-->
-        <scene sceneID="AFf-86-KH5">
+        <!--Second Table View Controller-->
+        <scene sceneID="BfS-sS-uPj">
             <objects>
-                <tableViewController id="Ca8-by-XfP" customClass="SecondTableViewController" customModule="LoggingSample" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="9ds-Gq-EJ3">
+                <viewController storyboardIdentifier="SecondTableViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="dp3-6Y-khG" customClass="SecondTableViewController" customModule="LoggingSample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="3Qw-K3-Cz8"/>
+                        <viewControllerLayoutGuide type="bottom" id="J83-BK-F9i"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3xu-Ln-aDN">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="secondCellIdentifier" textLabel="6Op-fC-xIv" style="IBUITableViewCellStyleDefault" id="DZs-Z5-CPL">
-                                <rect key="frame" x="0.0" y="28" width="414" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DZs-Z5-CPL" id="MNc-zU-Gep">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6Op-fC-xIv">
-                                            <rect key="frame" x="20" y="0.0" width="374" height="44"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="Ca8-by-XfP" id="SP6-WZ-ALH"/>
-                            <outlet property="delegate" destination="Ca8-by-XfP" id="oQf-Kj-gvz"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Title" id="IFc-vV-lYg">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="cSw-qG-8IE">
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="VDs-Pt-XvP">
+                                <rect key="frame" x="0.0" y="88" width="414" height="726"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="dp3-6Y-khG" id="u0a-na-WUz"/>
+                                    <outlet property="delegate" destination="dp3-6Y-khG" id="b3b-DA-trn"/>
+                                </connections>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bXm-nR-FlA">
+                                <rect key="frame" x="20" y="822" width="374" height="30"/>
+                                <state key="normal" title="Clear Logs"/>
+                                <connections>
+                                    <action selector="clearLogsTapped:" destination="dp3-6Y-khG" eventType="touchUpInside" id="s63-4E-aT4"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="J83-BK-F9i" firstAttribute="top" secondItem="bXm-nR-FlA" secondAttribute="bottom" constant="10" id="7uE-YJ-jyJ"/>
+                            <constraint firstItem="VDs-Pt-XvP" firstAttribute="top" secondItem="3Qw-K3-Cz8" secondAttribute="bottom" id="FIl-eh-ueG"/>
+                            <constraint firstItem="bXm-nR-FlA" firstAttribute="top" secondItem="VDs-Pt-XvP" secondAttribute="bottom" constant="8" id="NDh-BS-atl"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="bXm-nR-FlA" secondAttribute="trailing" id="X7o-4f-FaY"/>
+                            <constraint firstAttribute="trailing" secondItem="VDs-Pt-XvP" secondAttribute="trailing" id="XoZ-K0-WLk"/>
+                            <constraint firstItem="bXm-nR-FlA" firstAttribute="leading" secondItem="3xu-Ln-aDN" secondAttribute="leadingMargin" id="cfJ-rV-Ijf"/>
+                            <constraint firstItem="VDs-Pt-XvP" firstAttribute="leading" secondItem="3xu-Ln-aDN" secondAttribute="leading" id="f6A-Xi-3oM"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="c7U-lz-Fg5">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="qOB-xo-ecN">
                             <connections>
-                                <segue destination="HI4-hR-bD1" kind="show" id="EMS-6J-gLp"/>
+                                <segue destination="HI4-hR-bD1" kind="show" id="Qfx-ok-JDj"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="A1h-VG-pxB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                    <connections>
+                        <outlet property="tableView" destination="VDs-Pt-XvP" id="J5f-Pw-OgM"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Syp-ed-EIs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1613" y="-321"/>
+            <point key="canvasLocation" x="1571.0144927536232" y="-321.42857142857139"/>
         </scene>
         <!--New Log-->
         <scene sceneID="cpz-dR-Lfy">

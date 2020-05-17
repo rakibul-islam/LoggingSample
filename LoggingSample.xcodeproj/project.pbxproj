@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,8 +17,8 @@
 		F212A3291CC01A6B001C740A /* LogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F212A3241CC01A6B001C740A /* LogService.swift */; };
 		F212A32A1CC01A6B001C740A /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F212A3251CC01A6B001C740A /* MainTableViewController.swift */; };
 		F212A32B1CC01A6B001C740A /* SecondTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F212A3261CC01A6B001C740A /* SecondTableViewController.swift */; };
-		F2C472031CC17D9B00AA8D8B /* LogMO.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C472021CC17D9B00AA8D8B /* LogMO.swift */; };
 		F2C472051CC17E5400AA8D8B /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C472041CC17E5400AA8D8B /* DataController.swift */; };
+		F2F014832471B3AA00A3E63E /* LogMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F014812471B3AA00A3E63E /* LogMO+CoreDataClass.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,8 +34,8 @@
 		F212A3241CC01A6B001C740A /* LogService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
 		F212A3251CC01A6B001C740A /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 		F212A3261CC01A6B001C740A /* SecondTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondTableViewController.swift; sourceTree = "<group>"; };
-		F2C472021CC17D9B00AA8D8B /* LogMO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogMO.swift; sourceTree = "<group>"; };
 		F2C472041CC17E5400AA8D8B /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		F2F014812471B3AA00A3E63E /* LogMO+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "LogMO+CoreDataClass.swift"; path = "LoggingSample/LogMO+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,9 +86,9 @@
 		F212A3201CC01A3D001C740A /* Logging */ = {
 			isa = PBXGroup;
 			children = (
+				F2F014812471B3AA00A3E63E /* LogMO+CoreDataClass.swift */,
 				F212A3211CC01A6B001C740A /* Log.swift */,
 				F212A3241CC01A6B001C740A /* LogService.swift */,
-				F2C472021CC17D9B00AA8D8B /* LogMO.swift */,
 			);
 			name = Logging;
 			sourceTree = "<group>";
@@ -125,11 +125,12 @@
 				TargetAttributes = {
 					F212A3071CC019FD001C740A = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 1140;
 					};
 				};
 			};
 			buildConfigurationList = F212A3031CC019FD001C740A /* Build configuration list for PBXProject "LoggingSample" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 11.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -165,11 +166,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				F212A3281CC01A6B001C740A /* LoggingSample.xcdatamodeld in Sources */,
+				F2F014832471B3AA00A3E63E /* LogMO+CoreDataClass.swift in Sources */,
 				F212A30E1CC019FD001C740A /* AddLogViewController.swift in Sources */,
 				F212A3271CC01A6B001C740A /* Log.swift in Sources */,
 				F212A3291CC01A6B001C740A /* LogService.swift in Sources */,
 				F2C472051CC17E5400AA8D8B /* DataController.swift in Sources */,
-				F2C472031CC17D9B00AA8D8B /* LogMO.swift in Sources */,
 				F212A32B1CC01A6B001C740A /* SecondTableViewController.swift in Sources */,
 				F212A30C1CC019FD001C740A /* AppDelegate.swift in Sources */,
 				F212A32A1CC01A6B001C740A /* MainTableViewController.swift in Sources */,
@@ -312,10 +313,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = LoggingSample/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rakibulislam.LoggingSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -323,10 +331,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = LoggingSample/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rakibulislam.LoggingSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

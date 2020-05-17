@@ -10,6 +10,10 @@ import Foundation
 
 enum LogType: Int {
     case debug = 0, info, warning, error
+    
+    init?(raw64Value: Int64) {
+        self.init(rawValue: Int(raw64Value))
+    }
 }
 
 class Log: NSObject, NSSecureCoding {
@@ -17,17 +21,14 @@ class Log: NSObject, NSSecureCoding {
    
     var logType: LogType
     var message: String
-    var date: String
+    var date: Date
     var appendDate: Bool
     var showLogLevel: Bool
     
-    init(logType: LogType, message: String, appendDate: Bool, showLogLevel: Bool) {
+    init(logType: LogType, message: String, date: Date? = nil, appendDate: Bool, showLogLevel: Bool) {
         self.logType = logType
         self.message = message
-        let currentDate = Date()
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        self.date = formatter.string(from: currentDate)
+        self.date = date ?? Date()
         self.appendDate = appendDate
         self.showLogLevel = showLogLevel
         
@@ -39,20 +40,12 @@ class Log: NSObject, NSSecureCoding {
         
     }
     
-    init(logMO: LogMO) {
-        self.logType = LogType(rawValue: logMO.logType) ?? .debug
-        self.message = logMO.message ?? ""
-        self.date = logMO.date ?? ""
-        self.appendDate = logMO.appendDate
-        self.showLogLevel = logMO.showLogLevel
-        
-        super.init()
-    }
-    
     func printLog() -> String {
         var returnString = message
         if appendDate {
-            returnString = date + " : " + returnString
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            returnString = formatter.string(from: date) + " : " + returnString
         }
         if showLogLevel {
             switch logType {
@@ -71,17 +64,19 @@ class Log: NSObject, NSSecureCoding {
     
     func encode(with coder: NSCoder) {
         coder.encode(message, forKey: "message")
+        coder.encode(date, forKey: "date")
         coder.encode(logType.rawValue, forKey: "LogType")
         coder.encode(appendDate, forKey: "appendDate")
         coder.encode(showLogLevel, forKey: "showLogLevel")
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let message = aDecoder.decodeObject(forKey: "message") as! String
+        let message = aDecoder.decodeObject(forKey: "message") as? String ?? ""
         let logType = aDecoder.decodeInteger(forKey: "LogType")
+        let date = aDecoder.decodeObject(forKey: "date") as? Date
         let appendDate = aDecoder.decodeBool(forKey: "appendDate")
         let showLogLevel = aDecoder.decodeBool(forKey: "showLogLevel")
-        self.init(logType: LogType.init(rawValue: logType)!, message: message, appendDate: appendDate, showLogLevel: showLogLevel)
+        self.init(logType: LogType(rawValue: logType) ?? .debug, message: message, date: date, appendDate: appendDate, showLogLevel: showLogLevel)
         
     }
 }
